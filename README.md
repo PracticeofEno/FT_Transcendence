@@ -6,5 +6,5 @@
 ### Execution
 
     git clone https://github.com/PracticeofEno/FT_Transcendence.git
->directory FT_Transcendence<br/>
+>directory FT_Transcendence<br/><
     docker-compose up

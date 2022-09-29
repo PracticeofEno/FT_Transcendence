@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  42-postgres:
+    container_name: postgres
+    image: postgres:42
+    build: ./database
+    ports:
+      - "6432:5432"
+    networks:
+      - my_network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=test
+
+  42-backend:
+    container_name: backend
+    image: backend:42
+    build: ./backend
+    ports:
+      - "5000:5000"
+    networks:
+      - my_network
+    depends_on:
+      - 42-postgres
+
+  42-frontend:
+    container_name: frontend
+    image: frontend:42
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    networks:
+      - my_network
+    depends_on:
+      - 42-backend
+
+networks:
+  my_network:
+    name: my_network
+    driver: bridge

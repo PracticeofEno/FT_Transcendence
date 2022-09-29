@@ -4,7 +4,8 @@
 > port: 8080, 5432, 5000
 
 ### Execution
-
+goto clone foder 
+```
     git clone https://github.com/PracticeofEno/FT_Transcendence.git
->directory FT_Transcendence<br/><
     docker-compose up
+```

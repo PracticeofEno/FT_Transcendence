@@ -6,6 +6,8 @@ services:
     build: ./database
     ports:
       - "6432:5432"
+    volumes:
+      - psql:/var/lib/postgresql/data
     networks:
       - my_network
     environment:
@@ -39,3 +41,7 @@ networks:
   my_network:
     name: my_network
     driver: bridge
+
+volumes:
+  psql:
+    name: psql

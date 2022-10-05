@@ -59,6 +59,7 @@ const timer = ref(5);
 const isGameStart = ref(false);
 const checkFinished = ref(false);
 const timerAmimation = ref(false);
+const backend = import.meta.env.VITE_BACKEND;
 
 const socketOptions = {
   transportOptions: {
@@ -80,7 +81,7 @@ function setGameUser(where: GameUser, what: ApiUser) {
   where.lose = what?.lose;
 }
 
-const socket: Socket = io("http://localhost:5000/game", socketOptions);
+const socket: Socket = io(backend + "/game", socketOptions);
 socket.on("connect", () => {
   gameRoomInfo.socket = socket;
   if (chatStore.data.chat) {

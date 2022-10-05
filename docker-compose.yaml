@@ -5,7 +5,7 @@ services:
     image: postgres:42
     build: ./database
     ports:
-      - "6432:5432"
+      - "5432:5432"
     volumes:
       - psql:/var/lib/postgresql/data
     networks:
@@ -31,7 +31,7 @@ services:
     image: frontend:42
     build: ./frontend
     ports:
-      - "8080:8080"
+      - "80:80"
     networks:
       - my_network
     depends_on:

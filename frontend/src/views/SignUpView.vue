@@ -10,6 +10,7 @@ const message = ref("");
 const checkMsg = ref("공백, 특수문자 사용불가");
 const nickError = ref(false);
 const { cookies } = useCookies();
+const backend = import.meta.env.VITE_BACKEND;
 
 async function checkValid() {
   await axios

@@ -617,12 +617,12 @@ export class GameGateway {
   async watchGame(
     @ConnectedSocket() client,
     @MessageBody()
-    targetNick: string
+    targetID: string
   ) {
     let user_id = await this.getUserId(client);
     let user = await this.userService.getUserById(user_id);
 
-    let target = await this.userService.getUserByNickname(targetNick);
+    let target = await this.userService.getUserById(targetID);
 
     const roomNum = getRoomNumWithID.get(target.id);
     if (roomNum != undefined) {
@@ -800,11 +800,12 @@ export class GameGateway {
           checkReady.get(Number(data.roomNum))[0] = false;
           checkReady.get(Number(data.roomNum))[1] = false;
         }
+      } else if (!gameData.onGame) {
+        client.emit("finished", gameData.score);
       } else {
         /**client가 속한 room에 게임정보 송신. */
         this.server.to(data.roomNum).emit("gameData", gameData);
       }
-      // this.server.to(data.roomNum).emit("gameData", gameData);
     }
   }
 }

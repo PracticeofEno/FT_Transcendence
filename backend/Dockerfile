@@ -1,10 +1,22 @@
-FROM node:18-alpine3.15
-COPY src src
-WORKDIR /src
-RUN npm install -g @nestjs/cli
-COPY package.json ./package.json
-COPY tsconfig.build.json ./tsconfig.build.json
-COPY tsconfig.json ./tsconfig.json
+# Base image
+FROM node:18
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
+
+# Install app dependencies
 RUN npm install
-ENTRYPOINT ["npm"]
-CMD ["run", "start:dev"]
+
+# Bundle app source
+COPY . .
+
+# Creates a "dist" folder with the production build
+RUN npm run build
+#RUN rm -rf /usr/src/app/users/avatar
+COPY src/users/avatar ./users/avatar
+
+# Start the server using the production build
+CMD [ "node", "dist/main.js" ]

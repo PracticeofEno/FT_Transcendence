@@ -16,13 +16,24 @@ import { DM } from "../Entitys/direct.message.entity";
 import { LoginUserGateway } from "../chatting/current.login.gateway";
 import { ChattingGateway } from "../chatting/chatting.gateway";
 import { randomInt } from "crypto";
+import { ConfigService } from "@nestjs/config";
 
 @Controller("users")
 export class UsersController {
-  constructor(private userService: UsersService, private readonly twoFactorAuthenticationService: TwoFactorAuthenticationService, private authService: AuthService, private relationService: UserRelationService, private dmService: DMService, private rootGateway: LoginUserGateway, private chatGateway: ChattingGateway) {}
+  constructor(
+    private userService: UsersService, 
+    private readonly twoFactorAuthenticationService: TwoFactorAuthenticationService, 
+    private authService: AuthService, private relationService: UserRelationService, 
+    private dmService: DMService, private rootGateway: LoginUserGateway, private chatGateway: ChattingGateway,
+    private configService: ConfigService
+    ) {}
 
-  @Post("/login")
-  async login(@Response() res, @Body("code") code: string) {
+  @Get("/login")
+  async login(@Query("code") code: string) {
+    console.log(this.configService.get("JWT_ACCESS_TOKEN_SECRET"));
+    console.log(this.configService.get("JWT_ACCESS_TOKEN_EXPIRATION_TIME"));
+    console.log(this.configService.get("ClIENT_42_ID"));
+    console.log(this.configService.get("CLIENT_42_SECRET"));
     const tmp = await this.authService.getResourceOwnerId(code);
     console.log(tmp);
     if (tmp == "-1") {
@@ -36,12 +47,7 @@ export class UsersController {
       //if (user.status == 0) {
       const jwt = await this.authService.sign(payload);
       await this.userService.updateStatus(user, UserStatusType.ONLINE);
-      console.log(jwt);
-      res.setHeader("Authorization", "Bearer " + jwt);
-      res.cookie("jwt", jwt, {
-        maxAge: 60 * 60 * 1000,
-      });
-      return res.send(user);
+      return jwt;
       /*
       }
       else {
@@ -60,6 +66,7 @@ export class UsersController {
   @Get("/avatar/:id")
   async getAvatar(@Request() req, @Response() res, @Param("id") id) {
     let path = join(process.cwd(), "./users/avatar/" + id + ".png");
+    console.log(`maked path = ${path}`);
     console.log("1:", path);
     if (existsSync(path)) {
       res.sendFile(path);
@@ -96,7 +103,8 @@ export class UsersController {
 
   @Post("/nickname")
   @UseGuards(JwtTwoFactorGuard)
-  async createNickname(@Request() req, @Body("nickname") nickname) {
+  async updateNickname(@Request() req, @Body("nickname") nickname) {
+    console.log(nickname)
     let user = await this.userService.updateNickname(nickname, req.user.id);
     this.rootGateway.broadCastingEvent("change_nickname", {
       id: user.id,

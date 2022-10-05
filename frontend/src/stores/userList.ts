@@ -13,12 +13,13 @@ import { modalRecvBattleStore, modalAlertStore } from "@/stores/modal";
 import { useUserStore } from "@/stores/user";
 import { GameSocketStore } from "@/stores/gameSocket";
 import { getFriends, getLoginUser, getBlock } from "@/api/UserService";
+const backend = import.meta.env.VITE_BACKEND;
 
 export const UserListStore = defineStore({
   id: "UserListStore",
   state: () => ({
     onAll: true,
-    socket: io("http://localhost:5000/", socketOptions),
+    socket: io("/", socketOptions),
     allList: Array<User>(),
     friendList: Array<User>(),
     blockList: Array<User>(),

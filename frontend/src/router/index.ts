@@ -1,3 +1,4 @@
+import { tsParameterProperty } from "@babel/types";
 import { createRouter, createWebHistory } from "vue-router";
 import { useCookies } from "vue3-cookies";
 
@@ -57,7 +58,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-  if (to.name !== "login") {
+  if (to.name !== "login" && to.name !== "signup") {
     if (
       cookies.get("jwt") == null &&
       to.name != "auth" &&

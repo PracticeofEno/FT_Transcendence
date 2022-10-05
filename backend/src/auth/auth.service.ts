@@ -1,13 +1,16 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable, Response, Body, HttpStatus, HttpException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { firstValueFrom } from "rxjs";
-import { UsersService } from "../users/users.service";
-import { jwtConstants } from "./jwt/constants";
 
 @Injectable()
 export class AuthService {
-  constructor(private httpService: HttpService, private jwtService: JwtService) {}
+  constructor(
+    private httpService: HttpService, 
+    private jwtService: JwtService,
+    private configService: ConfigService
+    ) {}
 
   //해당 access_code로부터 리소스아이디를 가져옴, 에러나면 -1
   async getResourceOwnerId(code: string): Promise<string> {
@@ -17,10 +20,10 @@ export class AuthService {
           "https://api.intra.42.fr/oauth/token",
           {
             grant_type: "authorization_code",
-            client_id: "5c3d2a6bf104844ea4f78c93f23d1e1450574b0a9fc25f09192235fd29667651",
-            client_secret: "b3f335d840c746f08e0cca53bf4b18ef0c307983103ba6a0ad6d0b1af44692c4",
+            client_id: this.configService.get("ClIENT_42_ID"),
+            client_secret: this.configService.get("CLIENT_42_SECRET"),
             code: code,
-            redirect_uri: "http://localhost:8080/auth/",
+            redirect_uri: this.configService.get("REDIRECT_URI"),
           },
           {
             headers: { "Content-Type": "application/json" },
@@ -54,7 +57,7 @@ export class AuthService {
   async jwtVerify(token: string): Promise<Object> {
     try {
       const ret = await this.jwtService.verify(token, {
-        secret: jwtConstants.secret,
+        secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
       });
       return ret;
     } catch (e) {

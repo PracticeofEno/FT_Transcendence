@@ -4,6 +4,7 @@ import { useCookies } from "vue3-cookies";
 import { modalAlertStore } from "@/stores/modal";
 
 const { cookies } = useCookies();
+const backend = import.meta.env.VITE_BACKEND;
 
 const socketOptions = {
   transportOptions: {
@@ -18,7 +19,7 @@ const socketOptions = {
 export const GameSocketStore = defineStore({
   id: "GameSocketStore",
   state: () => ({
-    socket: io("http://localhost:5000/game", socketOptions),
+    socket: io("/game", socketOptions),
   }),
   actions: {
     disConnected() {

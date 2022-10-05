@@ -20,6 +20,7 @@ import { useUserStore } from "./user";
 import { UserListStore } from "./userList";
 import { modalAlertStore } from "@/stores/modal";
 import { DmStore } from "./dm";
+const backend = import.meta.env.VITE_BACKEND;
 
 const { cookies } = useCookies();
 const socketOptions = {
@@ -31,12 +32,12 @@ const socketOptions = {
     },
   },
 };
-// const socket = io("http://localhost:5000/chat", socketOptions);
+// const socket = io("/api/chat", socketOptions);
 
 export const ChatStore = defineStore({
   id: "chatStore",
   state: () => ({
-    socket: io("http://localhost:5000/chat", socketOptions),
+    socket: io("/chat", socketOptions),
     channels: Array<Channel>(),
     ownerChannels: Array<number>(),
     isScroll: false,

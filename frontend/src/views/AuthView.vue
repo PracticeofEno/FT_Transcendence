@@ -4,25 +4,31 @@ import { useRoute } from "vue-router";
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import loginName from "@/components/login/LogoName.vue";
-import { login } from "@/api/UserService";
+import { getSelf, login } from "@/api/UserService";
+import { useCookies } from "vue3-cookies";
 
+const cookies = useCookies();
 const currentRoute = useRoute();
 const store = useUserStore();
+const backend = import.meta.env.VITE_BACKEND;
 
 onMounted(async () => {
   try {
     const response = await login(String(currentRoute.query.code));
-    if (response.data) {
-      store.data = response.data;
-      store.data.avatarPath = response.data.avatarPath;
-      store.login = true;
-      if (response.data.nickname == "") {
-        router.push("/signup");
-      } else if (response.data.isTwoFactorAuthenticationEnabled) {
-        router.push("/twoFactor");
-      } else router.push("/");
+    useCookies().cookies.set("jwt", response);
+    store.data = await getSelf();
+    store.login = true;
+    if (store.data.nickname == "") {
+      console.log("1");
+      router.push("/signup");
+    } else if (store.data.isTwoFactorAuthenticationEnabled) {
+      router.push("/twoFactor");
+    } else {
+      console.log("2");
+      router.push("/");
     }
   } catch {
+    console.log("3");
     router.push("/login");
   }
 });

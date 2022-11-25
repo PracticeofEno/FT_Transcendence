@@ -51,6 +51,7 @@ export class UserRepository extends Repository<User> {
       user.id = userid;
       user.nickname = "";
       user.win = 0;
+      user.email = "";
       user.lose = 0;
       user.admin = false;
       user.avatarPath = "/api/users/avatar/profile" + Math.floor(Math.random() * 4);
@@ -129,5 +130,14 @@ export class UserRepository extends Repository<User> {
   async updateNormalGameRecord(user: User): Promise<User> {
     this.update(user.id, user);
     return user;
+  }
+
+  async checkEmail(email : string) : Promise<User> {
+    let data = await this.findOne({
+      where: {
+        email: email
+      },
+    });
+    return data;
   }
 }

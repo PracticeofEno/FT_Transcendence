@@ -149,4 +149,21 @@ export class UsersService {
   async updateNormalGameRecord(user: User): Promise<User> {
     return await this.userRepository.updateNormalGameRecord(user);
   }
+
+  async checkEmail(email : string) : Promise<User> {
+    return await this.userRepository.checkEmail(email);
+  }
+
+  async getOwnerId() : Promise<number | undefined> {
+    let owner_id;
+
+    owner_id = Math.floor(Math.random() * 1000000);
+    let tmp = this.userRepository.checkUser(owner_id.toString());
+    if (!tmp) {
+      return owner_id;
+    }
+    else {
+      return -1
+    }
+  }
 }

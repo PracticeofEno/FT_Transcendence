@@ -29,31 +29,30 @@ export class UsersController {
     ) {}
 
   @Get("/login")
-  async login(@Query("code") code: string) {
+  async login(@Query("email") email: string) {
     console.log(this.configService.get("JWT_ACCESS_TOKEN_SECRET"));
     console.log(this.configService.get("JWT_ACCESS_TOKEN_EXPIRATION_TIME"));
     console.log(this.configService.get("ClIENT_42_ID"));
     console.log(this.configService.get("CLIENT_42_SECRET"));
-    const tmp = await this.authService.getResourceOwnerId(code);
+    console.log("aaa");
+    //const tmp = await this.authService.getResourceOwnerId(code);
+    
+    const tmp = await this.userService.checkEmail(email);
     console.log(tmp);
-    if (tmp == "-1") {
+    if (tmp) {
       throw new HttpException("Can't get resourceOwner ID", HttpStatus.BAD_REQUEST);
     } else {
-      if ((await this.userService.checkUser(tmp)) == false) {
-        await this.userService.createUser(tmp);
+      let owner_id = await this.userService.getOwnerId();
+      if (owner_id != -1) {
+        await this.userService.createUser(owner_id.toString());
       }
-      const user = await this.userService.getUserById(tmp);
+      const user = await this.userService.getUserById(owner_id.toString());
+      console.log(user);
       const payload = { id: tmp, sub: tmp };
       //if (user.status == 0) {
       const jwt = await this.authService.sign(payload);
       await this.userService.updateStatus(user, UserStatusType.ONLINE);
       return jwt;
-      /*
-      }
-      else {
-        throw new HttpException("Already Logged in User", HttpStatus.CONFLICT);
-      }
-      */
     }
   }
 
@@ -85,7 +84,8 @@ export class UsersController {
   @Post("/")
   @UseGuards(JwtTwoFactorGuard)
   async createUser(@Request() req, @Body() body) {
-    const user = this.userService.createUser(req.user.id);
+    let id =  Math.floor(Math.random() * 1000000);
+    const user = this.userService.createUser(id.toString());
     return user;
   }
 

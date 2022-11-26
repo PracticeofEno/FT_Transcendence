@@ -39,7 +39,7 @@ export class UserRepository extends Repository<User> {
     return found;
   }
 
-  async createUser(userid: string): Promise<User> {
+  async createUser(userid: string, email: string): Promise<User> {
     let user;
     const found = await this.findOne({
       where: {
@@ -51,7 +51,7 @@ export class UserRepository extends Repository<User> {
       user.id = userid;
       user.nickname = "";
       user.win = 0;
-      user.email = "";
+      user.email = email;
       user.lose = 0;
       user.admin = false;
       user.avatarPath = "/api/users/avatar/profile" + Math.floor(Math.random() * 4);

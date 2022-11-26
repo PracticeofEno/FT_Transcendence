@@ -33,8 +33,17 @@ export class UsersService {
     return found;
   }
 
-  async createUser(id: string): Promise<User> {
-    const user = await this.userRepository.createUser(id);
+  async getUserByEmail(email: string): Promise<User> {
+    const found = await this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+    return found;
+  }
+
+  async createUser(id: string, email : string): Promise<User> {
+    const user = await this.userRepository.createUser(id, email);
     return user;
   }
 
@@ -158,7 +167,7 @@ export class UsersService {
     let owner_id;
 
     owner_id = Math.floor(Math.random() * 1000000);
-    let tmp = this.userRepository.checkUser(owner_id.toString());
+    let tmp = await this.userRepository.checkUser(owner_id.toString());
     if (!tmp) {
       return owner_id;
     }

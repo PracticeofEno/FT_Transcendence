@@ -30,30 +30,24 @@ export class UsersController {
 
   @Get("/login")
   async login(@Query("email") email: string) {
-    console.log(this.configService.get("JWT_ACCESS_TOKEN_SECRET"));
-    console.log(this.configService.get("JWT_ACCESS_TOKEN_EXPIRATION_TIME"));
-    console.log(this.configService.get("ClIENT_42_ID"));
-    console.log(this.configService.get("CLIENT_42_SECRET"));
-    console.log("aaa");
+    // console.log(this.configService.get("JWT_ACCESS_TOKEN_SECRET"));
+    // console.log(this.configService.get("JWT_ACCESS_TOKEN_EXPIRATION_TIME"));
+    // console.log(this.configService.get("ClIENT_42_ID"));
+    // console.log(this.configService.get("CLIENT_42_SECRET"));
     //const tmp = await this.authService.getResourceOwnerId(code);
-    
     const tmp = await this.userService.checkEmail(email);
-    console.log(tmp);
-    if (tmp) {
-      throw new HttpException("Can't get resourceOwner ID", HttpStatus.BAD_REQUEST);
-    } else {
+    if (tmp == null) {
       let owner_id = await this.userService.getOwnerId();
       if (owner_id != -1) {
-        await this.userService.createUser(owner_id.toString());
+        await this.userService.createUser(owner_id.toString(), email);
       }
-      const user = await this.userService.getUserById(owner_id.toString());
-      console.log(user);
-      const payload = { id: tmp, sub: tmp };
-      //if (user.status == 0) {
-      const jwt = await this.authService.sign(payload);
-      await this.userService.updateStatus(user, UserStatusType.ONLINE);
-      return jwt;
     }
+    const user = await this.userService.getUserByEmail(email);
+    const payload = { id: user.id, tmp : user.id };
+    //if (user.status == 0) {
+    const jwt = await this.authService.sign(payload);
+    await this.userService.updateStatus(user, UserStatusType.ONLINE);
+    return jwt;
   }
 
   @UseGuards(JwtTwoFactorGuard)
@@ -64,15 +58,13 @@ export class UsersController {
 
   @Get("/avatar/:id")
   async getAvatar(@Request() req, @Response() res, @Param("id") id) {
-    let path = join(process.cwd(), "./users/avatar/" + id + ".png");
+    let path = join(process.cwd(), "./src/users/avatar/" + id + ".png");
     console.log(`maked path = ${path}`);
-    console.log("1:", path);
     if (existsSync(path)) {
       res.sendFile(path);
       console.log("2:", path);
     } else {
-      path = join(process.cwd(), "./users/avatar/" + id + ".svg");
-      console.log("3:", path);
+      path = join(process.cwd(), "./src/users/avatar/" + id + ".svg");
       if (existsSync(path)) {
         res.sendFile(path);
       } else {
@@ -81,13 +73,13 @@ export class UsersController {
     }
   }
 
-  @Post("/")
-  @UseGuards(JwtTwoFactorGuard)
-  async createUser(@Request() req, @Body() body) {
-    let id =  Math.floor(Math.random() * 1000000);
-    const user = this.userService.createUser(id.toString());
-    return user;
-  }
+  // @Post("/")
+  // @UseGuards(JwtTwoFactorGuard)
+  // async createUser(@Request() req, @Body() body) {
+  //   let id =  Math.floor(Math.random() * 1000000);
+  //   const user = this.userService.createUser(id.toString(), "");
+  //   return user;
+  // }
 
   @Get("/nickname")
   @UseGuards(JwtTwoFactorGuard)
@@ -104,7 +96,6 @@ export class UsersController {
   @Post("/nickname")
   @UseGuards(JwtTwoFactorGuard)
   async updateNickname(@Request() req, @Body("nickname") nickname) {
-    console.log(nickname)
     let user = await this.userService.updateNickname(nickname, req.user.id);
     this.rootGateway.broadCastingEvent("change_nickname", {
       id: user.id,
@@ -136,6 +127,7 @@ export class UsersController {
       fileFilter: imageFileFilter,
     })
   )
+
   @Post("/avatar")
   async uploadAvatar(@Request() req, @UploadedFile() file: Express.Multer.File) {
     let user = await this.userService.getUserById(req.user.id);

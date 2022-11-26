@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const authUrl = import.meta.env.VITE_42_AUTH_URL;
+const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&include_granted_scopes=true&response_type=token&redirect_uri=http://localhost:3000/auth&client_id=86284776012-0covoldjsbrr962qki0295r3quqr8ik3.apps.googleusercontent.com';
 </script>
 
 <template>

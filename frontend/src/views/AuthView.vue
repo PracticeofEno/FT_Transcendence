@@ -14,17 +14,22 @@ const backend = import.meta.env.VITE_BACKEND;
 
 onMounted(async () => {
   try {
-    const response = await login(String(currentRoute.query.code));
-    useCookies().cookies.set("jwt", response);
+    let access_token = currentRoute.fullPath.substring(currentRoute.fullPath.indexOf("=") + 1, currentRoute.fullPath.indexOf("&"));
+       const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ` + access_token,
+        },
+      });
+    let jwt = await login(res.data.email);
+    console.log(jwt.data.email);
+    useCookies().cookies.set("jwt", jwt.data);
     store.data = await getSelf();
     store.login = true;
     if (store.data.nickname == "") {
-      console.log("1");
       router.push("/signup");
     } else if (store.data.isTwoFactorAuthenticationEnabled) {
       router.push("/twoFactor");
     } else {
-      console.log("2");
       router.push("/");
     }
   } catch {

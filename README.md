@@ -59,20 +59,40 @@
 
 -----------------------------------------------
 
-
 ## Requirements
-> - OS : linux    
-> - 42API key, secret ( Oauth )
-> - docker, docker-compose  
-> - port: bind 8080(front), 5432(postgres in docker), 5000(nestjs in docker)
-> - config /backend/.env -> REDIRECT_URI='your_oauth_redirect_uri'  
-> - config /frontend/.env -> ..VITE_URL= blabla.. &redirect_uri=your_oauth_redirect_uri&...blabla
+> - Docker, Dcoekr-compose
+> - port: 3000(front), 5432(postgres in docker), 5000(nestjs in docker)
 
-
-
-### Execution
-**goto clone foder**
+## 실행
 ```
-    git clone https://github.com/PracticeofEno/FT_Transcendence.git
-    docker-compose up
+git clone ft~..
+cd ft~..
+docker-compose up -build
 ```
+
+## 기술 스택
+- TypeOrm
+- Nestjs
+- VueJs
+- javascript
+- postgresql
+- socket.io
+
+--------------------------
+
+## 사전지식 자료 정리 및 출처
+- 데코레이터 출처 : https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841 
+- 의존성 주입 출처 : https://mangkyu.tistory.com/150
+- ES5 to ES6 출처 : https://ui.toast.com/fe-guide/ko_ES5-TO-ES6
+- SPA(Single Page Application) 출처: https://m.blog.naver.com/dktmrorl/222085340333 
+- Vue3 : https://enocent.notion.site/Vue-js-7d9f0bca3191499884a4935ea12160e5
+- Nestjs: https://enocent.notion.site/NestJS-ca5379e770e3443f9a4b437684a38b43
+- typescript : https://enocent.notion.site/TypeScript-e3b802e1091347d093c1ff7c1c37abfb
+- Nodejs 구조 : https://enocent.notion.site/node-js-af927310d5f3491ea0586ae9daf96176
+- JWT(json web token) 출처 : https://tech.toktokhan.dev/2021/04/30/JWT/
+- oauth 2.0 출처 : https://hwannny.tistory.com/92
+- Nestjs - socket.io : https://docs.nestjs.com/websockets/gateways
+
+
+## Backend DB 구조
+![2022-11-27 오후 6-27-43](https://user-images.githubusercontent.com/57505385/204128177-373b3521-ef5e-40da-acbd-c92fd189f4ac.png)

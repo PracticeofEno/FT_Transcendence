@@ -1,5 +1,7 @@
 ### ~~42API 기한 만료로 인해 더이상 동작하지 않습니다(Oauth 단일 로그인 방식)~~ -> google oauth 변경
-## google oauth의 경우 원시 host ip를 지원하지 않는것으로 추정됨
+## google oauth의 경우 redirect uri 유효성 검사가 원시 host ip를 지원하지 않는것으로 추정됨
+- 각 서버에 대한 ip를 localhost로 통일시킨 이유
+- backend -> localhost:5000, frontend -> localhost:3000, postgres->localhost:5432
 - 출처 : https://developers.google.com/identity/protocols/oauth2/web-server#uri-validation
 
 ----------------------
@@ -96,3 +98,5 @@ docker-compose up -build
 
 ## Backend DB 구조
 ![2022-11-27 오후 6-27-43](https://user-images.githubusercontent.com/57505385/204128177-373b3521-ef5e-40da-acbd-c92fd189f4ac.png)
+
+

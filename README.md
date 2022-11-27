@@ -67,8 +67,8 @@
 
 ## 실행
 ```
-git clone ft~..
-cd ft~..
+git clone https://github.com/PracticeofEno/ft_transcendence
+cd ft_transcendence
 docker-compose up -build
 ```
 

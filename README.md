@@ -100,6 +100,7 @@ docker-compose up -build
 ![2022-11-27 오후 6-27-43](https://user-images.githubusercontent.com/57505385/204128177-373b3521-ef5e-40da-acbd-c92fd189f4ac.png)
 
 ## 실행 화면
+
 ![2022-11-27 오후 10-26-47](https://user-images.githubusercontent.com/57505385/204142580-f2de8d69-5fb1-4aa7-a2e2-f232cf9669cf.png)
 ![2](https://user-images.githubusercontent.com/57505385/204142583-b36f6e9d-564d-440d-a255-946d02395dc9.png)
 ![3](https://user-images.githubusercontent.com/57505385/204142585-e3ca4d33-f3ca-4867-a358-4af6c1e3987e.png)

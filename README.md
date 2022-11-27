@@ -62,8 +62,8 @@
 -----------------------------------------------
 
 ## Requirements
-> - Docker, Dcoekr-compose
-> - port: 3000(front), 5432(postgres in docker), 5000(nestjs in docker)
+- Docker, Dcoekr-compose
+- port 3000(front), 5432(postgres in docker), 5000(nestjs in docker)
 
 ## 실행
 ```

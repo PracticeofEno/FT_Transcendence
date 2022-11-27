@@ -99,4 +99,11 @@ docker-compose up -build
 ## Backend DB 구조
 ![2022-11-27 오후 6-27-43](https://user-images.githubusercontent.com/57505385/204128177-373b3521-ef5e-40da-acbd-c92fd189f4ac.png)
 
+## 실행 화면
+![2022-11-27 오후 10-26-47](https://user-images.githubusercontent.com/57505385/204142580-f2de8d69-5fb1-4aa7-a2e2-f232cf9669cf.png)
+![2](https://user-images.githubusercontent.com/57505385/204142583-b36f6e9d-564d-440d-a255-946d02395dc9.png)
+![3](https://user-images.githubusercontent.com/57505385/204142585-e3ca4d33-f3ca-4867-a358-4af6c1e3987e.png)
+![4](https://user-images.githubusercontent.com/57505385/204142586-16ab13f0-310e-4870-b683-e0c121d53a48.png)
+![5](https://user-images.githubusercontent.com/57505385/204142587-aefc5540-4ebd-488f-b2ca-c742c0e729cb.png)
+![6](https://user-images.githubusercontent.com/57505385/204142579-300d513e-1a13-488c-8068-eca1ec4ffd49.png)
 

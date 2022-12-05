@@ -1,7 +1,7 @@
 #### 3인팀 
-- 박상흠(front 데이터 바인딩 및 Vue 지식 공유, backend 코드)
+- 박상흠(front 데이터 바인딩 및 Vue3 학습 및 공유, backend 코드)
 - 신인호(front디자인 및 데이터 바인딩)
-- 최영덕(백엔드 - game관련, 프론트-game관련)
+- 최영덕(백엔드 - game관련, 프론트 - game관련)
 ### ~~42API 기한 만료로 인해 더이상 동작하지 않습니다(Oauth 단일 로그인 방식)~~ -> google oauth 변경
 ## google oauth의 경우 redirect uri 유효성 검사가 원시 host ip를 지원하지 않는것으로 추정됨
 - 각 서버에 대한 ip를 localhost로 통일시킨 이유

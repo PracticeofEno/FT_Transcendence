@@ -33,7 +33,7 @@ import { DmStore } from "./dm";
 //     },
 //   },
 // };
-// const socket = io("http://localhost:5000/chat", socketOptions);
+// const socket = io("/api/chat", socketOptions);
 
 export const ChatStore = defineStore({
   id: "chatStore",

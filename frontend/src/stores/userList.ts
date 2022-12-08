@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { io } from "socket.io-client";
 import { useCookies } from "vue3-cookies";
+import { Socket } from "socket.io-client";
+
 import type {
   User,
   Dm,
@@ -13,13 +15,12 @@ import { modalRecvBattleStore, modalAlertStore } from "@/stores/modal";
 import { useUserStore } from "@/stores/user";
 import { GameSocketStore } from "@/stores/gameSocket";
 import { getFriends, getLoginUser, getBlock } from "@/api/UserService";
-const backend = import.meta.env.VITE_BACKEND;
 
 export const UserListStore = defineStore({
   id: "UserListStore",
   state: () => ({
     onAll: true,
-    socket: io("/", socketOptions),
+    socket: Socket.prototype,
     allList: Array<User>(),
     friendList: Array<User>(),
     blockList: Array<User>(),
@@ -51,16 +52,16 @@ export const UserListStore = defineStore({
   },
 });
 
-const { cookies } = useCookies();
-const socketOptions = {
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        Authorization: "Bearer " + cookies.get("jwt"),
-      },
-    },
-  },
-};
+// const { cookies } = useCookies();
+// const socketOptions = {
+//   transportOptions: {
+//     polling: {
+//       extraHeaders: {
+//         Authorization: "Bearer " + cookies.get("jwt"),
+//       },
+//     },
+//   },
+// };
 
 const userListStore = UserListStore();
 
@@ -147,13 +148,13 @@ function changeUserStatus(
   }
 }
 
-UserListStore().socket?.on("connect", async () => {
-  console.log("socket connected");
-  userListStore.allList = await getLoginUser();
-  userListStore.friendList = await getFriends();
-  userListStore.blockList = await getBlock();
-  userListStore.showViewList();
-});
+// UserListStore().socket?.on("connect", async () => {
+//   console.log("socket connected");
+//   userListStore.allList = await getLoginUser();
+//   userListStore.friendList = await getFriends();
+//   userListStore.blockList = await getBlock();
+//   userListStore.showViewList();
+// });
 
 // 로그인
 userListStore.socket?.on("login", (data: User) => {

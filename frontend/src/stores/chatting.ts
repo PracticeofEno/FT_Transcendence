@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
-import { io } from "socket.io-client";
-import { useCookies } from "vue3-cookies";
+// import { io } from "socket.io-client";
+// import { useCookies } from "vue3-cookies";
+import { Socket } from "socket.io-client";
+
 import type {
   Channel,
   ChannelMessage,
@@ -20,24 +22,23 @@ import { useUserStore } from "./user";
 import { UserListStore } from "./userList";
 import { modalAlertStore } from "@/stores/modal";
 import { DmStore } from "./dm";
-const backend = import.meta.env.VITE_BACKEND;
 
-const { cookies } = useCookies();
-const socketOptions = {
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        Authorization: "Bearer " + cookies.get("jwt"),
-      },
-    },
-  },
-};
-// const socket = io("/api/chat", socketOptions);
+// const { cookies } = useCookies();
+// const socketOptions = {
+//   transportOptions: {
+//     polling: {
+//       extraHeaders: {
+//         Authorization: "Bearer " + cookies.get("jwt"),
+//       },
+//     },
+//   },
+// };
+// const socket = io("http://localhost:5000/chat", socketOptions);
 
 export const ChatStore = defineStore({
   id: "chatStore",
   state: () => ({
-    socket: io("/chat", socketOptions),
+    socket: Socket.prototype,
     channels: Array<Channel>(),
     ownerChannels: Array<number>(),
     isScroll: false,
@@ -85,6 +86,7 @@ export const ChatStore = defineStore({
       this.data.type = "public";
       this.data.messages = [];
       this.data.participants = [];
+      this.data.banList = [];
     },
     chatClose() {
       this.onBurger = false;

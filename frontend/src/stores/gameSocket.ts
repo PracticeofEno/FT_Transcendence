@@ -1,25 +1,11 @@
 import { defineStore } from "pinia";
-import { io } from "socket.io-client";
-import { useCookies } from "vue3-cookies";
+import { Socket } from "socket.io-client";
 import { modalAlertStore } from "@/stores/modal";
-
-const { cookies } = useCookies();
-const backend = import.meta.env.VITE_BACKEND;
-
-const socketOptions = {
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        Authorization: "Bearer " + cookies.get("jwt"),
-      },
-    },
-  },
-};
 
 export const GameSocketStore = defineStore({
   id: "GameSocketStore",
   state: () => ({
-    socket: io("/game", socketOptions),
+    socket: Socket.prototype,
   }),
   actions: {
     disConnected() {

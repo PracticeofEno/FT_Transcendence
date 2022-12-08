@@ -2,17 +2,27 @@
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useCookies } from "vue3-cookies";
 import LogoName from "@/components/login/LogoName.vue";
-
+import { modalAlertStore } from "@/stores/modal";
+import AlertModal from "@/components/home/AlertModal.vue";
+import { getSelf } from "@/api/UserService";
 const message = ref("");
 const checkMsg = ref("공백, 특수문자 사용불가");
 const nickError = ref(false);
 const { cookies } = useCookies();
-const backend = import.meta.env.VITE_BACKEND;
+
+onMounted(async () => {
+  const self = await getSelf();
+  useUserStore().data = self;
+  if (cookies.get("jwt") && useUserStore().data.nickname.length > 0) {
+    router.push("/login");
+  }
+});
 
 async function checkValid() {
+  if (nickError.value) return;
   await axios
     .post(
       "/api/users/nickname",
@@ -30,8 +40,9 @@ async function checkValid() {
     })
     .catch((error) => {
       console.log(error);
-      nickError.value = true;
-      checkMsg.value = "사용할 수 없는 닉네임입니다.";
+      nickError.value = false;
+      checkMsg.value = "공백, 특수문자 사용불가";
+      modalAlertStore().alertMsg("사용할 수 없는 닉네임입니다");
       message.value = "";
     });
 }
@@ -56,6 +67,7 @@ function inputValid() {
 </script>
 
 <template>
+  <AlertModal />
   <div class="wrapper login_component">
     <LogoName />
     <div class="profile">
@@ -69,7 +81,7 @@ function inputValid() {
         placeholder="NICKNAME"
         @keyup.enter="checkValid"
       />
-      <p class="alert" :class="{ on: message, re: nickError }">
+      <p class="alert" :class="{ re: nickError }">
         {{ checkMsg }}
       </p>
     </div>
@@ -127,12 +139,8 @@ function inputValid() {
   text-align: center;
   vertical-align: middle;
   color: var(--offline);
-  opacity: 0;
 }
 
-.alert.on {
-  opacity: 1;
-}
 .alert.re {
   color: var(--yellow);
 }

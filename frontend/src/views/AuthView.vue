@@ -4,13 +4,13 @@ import { useRoute } from "vue-router";
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import loginName from "@/components/login/LogoName.vue";
-import { getSelf, login } from "@/api/UserService";
+import { login, getSelf } from "@/api/UserService";
+import { modalAlertStore } from "@/stores/modal";
+import axios from "axios";
 import { useCookies } from "vue3-cookies";
 
-const cookies = useCookies();
 const currentRoute = useRoute();
 const store = useUserStore();
-const backend = import.meta.env.VITE_BACKEND;
 
 onMounted(async () => {
   try {

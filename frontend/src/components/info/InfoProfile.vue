@@ -67,6 +67,7 @@ async function updateAvatarImg() {
     const form = new FormData();
     form.append("file", selectFile.value.files[0]); // api file name
     await updateAvatar(form);
+    (document.getElementById("fileUpload") as HTMLFormElement).value = null;
   } else {
     alert("파일을 선택해 주세요.");
   }
@@ -168,7 +169,12 @@ function calcPercent(win: number, lose: number): number {
       <div class="profile_img_box">
         <div class="profile_img">
           <img :src="store.data.avatarPath" alt="" />
-          <input @change="updateAvatarImg" type="file" ref="selectFile" />
+          <input
+            @change="updateAvatarImg"
+            type="file"
+            id="fileUpload"
+            ref="selectFile"
+          />
         </div>
         <button @click="changeDefault">X</button>
       </div>

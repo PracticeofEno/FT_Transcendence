@@ -11,13 +11,18 @@ const showRowNum = 2; // 더보기 클릭시 보여줄 줄 수
 const rowCount = ref(0);
 const disableBtn = ref(false);
 onBeforeMount(async () => {
+  disableBtn.value = true;
   rankList = await getRankingList();
   for (let i = 0; i < rankList.length; i++) {
     if (i == firstRowNum) break;
     viewList.value.push(rankList[i]);
     rowCount.value++;
   }
-  console.log(rankList);
+  if (rankList.length === rowCount.value) {
+    disableBtn.value = true;
+    return;
+  }
+  disableBtn.value = false;
 });
 
 function moreList() {

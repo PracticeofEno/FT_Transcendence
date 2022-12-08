@@ -55,6 +55,7 @@ watch(
 );
 
 onBeforeMount(async () => {
+  disableBtn.value = true;
   if (props.nickname !== "") {
     historys = await getHistory(props.nickname);
     historys.reverse();
@@ -67,6 +68,7 @@ onBeforeMount(async () => {
       disableBtn.value = true;
       return;
     }
+    disableBtn.value = false;
   }
 });
 

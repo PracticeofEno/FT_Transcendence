@@ -1,13 +1,10 @@
 import axios, { type AxiosResponse } from "axios";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
-const backend = import.meta.env.VITE_BACKEND;
-axios.defaults.withCredentials = true;
 
-export async function login(code: string) {
-  console.log("/api/users/login");
-  const response = await axios.get("/api/users/login?code=" + code);
-  return response.data;
+export async function login(code: string): Promise<AxiosResponse<any>> {
+  const response = await axios.get("/api/users/login?email=" + code);
+  return response;
 }
 
 export async function getSelf() {
@@ -28,7 +25,7 @@ export async function getUserById(id: string) {
   return response.data;
 }
 
-export async function updateNickname(nickname: string) {
+export async function updateNickname(nickname: string): Promise<boolean> {
   let result = false;
   await axios
     .post(
@@ -76,7 +73,9 @@ export async function getRankingList() {
   return response.data;
 }
 
-export async function changeDefaultAvatar(number: number) {
+export async function changeDefaultAvatar(
+  number: number
+): Promise<AxiosResponse<any>> {
   const response = await axios.post(
     "/api/users/avatar/default",
     {

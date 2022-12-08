@@ -7,19 +7,53 @@ import { useUserStore } from "@/stores/user";
 import { getSelf } from "@/api/UserService";
 import ProfileModal from "@/components/home/ProfileModal.vue";
 import { UserListStore } from "@/stores/userList";
+import { ChatStore } from "@/stores/chatting";
 import { useRouter } from "vue-router";
 import { GameSocketStore } from "@/stores/gameSocket";
-import { gameRoomInfoStore } from "@/stores/game";
+import { gameRoomInfoStore, gameWatchStore } from "@/stores/game";
 import RecvBattle from "@/components/game/ModalRecvBattle.vue";
 import AlertModal from "@/components/home/AlertModal.vue";
+import { useCookies } from "vue3-cookies";
+import { io } from "socket.io-client";
+import { modalAlertStore } from "@/stores/modal";
+import { getFriends, getLoginUser, getBlock } from "@/api/UserService";
+
+const { cookies } = useCookies();
+const socketOptions = {
+  transportOptions: {
+    polling: {
+      extraHeaders: {
+        Authorization: "Bearer " + cookies.get("jwt"),
+      },
+    },
+  },
+};
+
+UserListStore().socket = io("http://localhost:5000/", socketOptions);
+GameSocketStore().socket = io("http://localhost:5000/game", socketOptions);
+ChatStore().socket = io("http://localhost:5000/chat", socketOptions);
 
 const router = useRouter();
 // import { CurrentUserStore } from "@/stores/tmp";
 
-const store = useUserStore();
+const self = useUserStore();
+
+UserListStore().socket?.on("connect", async () => {
+  console.log("socket connected");
+  UserListStore().allList = await getLoginUser();
+  UserListStore().friendList = await getFriends();
+  UserListStore().blockList = await getBlock();
+  UserListStore().showViewList();
+});
+
+UserListStore().socket.on("alreadyLogin", () => {
+  console.log("이미 로그인된 유저입니다");
+  modalAlertStore().alertMsg("중복 로그인입니다. 다시 로그인 해주세요");
+  router.push('/login');
+});
 
 onBeforeMount(async () => {
-  store.data = await getSelf();
+  self.data = await getSelf();
 });
 
 onBeforeUnmount(() => {
@@ -32,7 +66,8 @@ GameSocketStore().socket?.on("vsbattle", () => {
 });
 
 GameSocketStore().socket?.on("watchGame", () => {
-  gameRoomInfoStore().data.mode = 2;
+  gameWatchStore().data.isWatch = true;
+  gameRoomInfoStore().data.mode = -2;
   router.push("battle");
 });
 </script>

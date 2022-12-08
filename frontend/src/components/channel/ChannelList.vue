@@ -68,9 +68,8 @@ async function join(channel: Channel, index: number) {
   console.log("join");
   const tf = await joinChannel(channel.id, "");
   if (tf === "ban") {
-    alertModal.onModal = true;
-    alertModal.alertMsg("해당 채널에서 들어갈 수 없습니다");
-  } else if (tf) {
+    alertModal.alertMsg("해당 채널에 들어갈 수 없습니다");
+  } else if (tf === true) {
     const findIndex = chatStore.myChannels.findIndex(
       (element: number) => element === channel.id
     );

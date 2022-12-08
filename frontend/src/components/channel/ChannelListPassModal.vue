@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { modalPassStore } from "@/stores/modal";
+import { modalPassStore, modalAlertStore } from "@/stores/modal";
 import { joinChannel } from "@/api/ChannelService";
 import { ChatStore } from "@/stores/chatting";
 
+const alertModal = modalAlertStore();
 const passModal = modalPassStore();
 const chatStore = ChatStore();
 
@@ -19,7 +20,11 @@ function alertMsg() {
 async function passModalOkayBtn() {
   console.log(passModal.data.password);
   const isOk = await joinChannel(passModal.data.id, passModal.data.password);
-  if (isOk) {
+  if (isOk === "ban") {
+    passModal.onModal = false;
+    alertModal.alertMsg("해당 채널에 들어갈 수 없습니다");
+    passModal.$reset();
+  } else if (isOk === true) {
     chatStore.myChannels.push(passModal.data.id);
     passModal.onModal = false;
     chatStore.onChat = true;

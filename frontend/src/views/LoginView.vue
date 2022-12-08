@@ -2,9 +2,11 @@
 import AuthBtn from "@/components/login/AuthBtn.vue";
 import LogoName from "@/components/login/LogoName.vue";
 import LogoImg from "@/components/login/LogoImg.vue";
+import AlertModal from "@/components/home/AlertModal.vue";
 </script>
 
 <template>
+  <AlertModal />
   <div class="wrapper login_component">
     <LogoName />
     <LogoImg />

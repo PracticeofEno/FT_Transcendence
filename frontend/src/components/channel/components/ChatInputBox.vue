@@ -4,17 +4,31 @@ import { useUserStore } from "@/stores/user";
 import { UserListStore } from "@/stores/userList";
 import { gameRoomInfoStore } from "@/stores/game";
 import { modalAlertStore } from "@/stores/modal";
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
 
 const chatMsg = ref("");
+const chatCount = ref(0);
+const startInterval = ref(true);
 const chatStore = ChatStore();
 const self = useUserStore();
 const userListStore = UserListStore();
 const gameRoomInfo = gameRoomInfoStore();
+let interval: ReturnType<typeof setInterval>;
+
+onUnmounted(() => {
+  clearInterval(interval);
+});
 
 function sendMessage() {
   if (chatMsg.value == "") return;
-  if (chatStore.data.category === "channel") {
+  if (chatMsg.value.length > 100) {
+    modalAlertStore().alertMsg("메시지를 100자 이하로 적어주세요");
+    return;
+  } else if (chatCount.value > 2) {
+    modalAlertStore().alertMsg(
+      `도배 금지! ${chatCount.value - 2}초 후 메시지를 보낼 수 있습니다`
+    );
+  } else if (chatStore.data.category === "channel") {
     chatStore.sendMessage(chatStore.data.chat.id, chatMsg.value);
   } else if (chatStore.data.category === "dm") {
     const dmUser = chatStore.data.participants.find(
@@ -42,6 +56,19 @@ function sendMessage() {
     });
   }
   chatMsg.value = "";
+  chatCount.value++;
+  if (chatCount.value == 2 && startInterval.value) {
+    interval = setInterval(() => {
+      startInterval.value = false;
+      if (chatCount.value <= 0) {
+        clearInterval(interval);
+        startInterval.value = true;
+        return;
+      }
+      chatCount.value--;
+      console.log("count: ", chatCount.value);
+    }, 1000);
+  }
 }
 </script>
 

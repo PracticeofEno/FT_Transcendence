@@ -46,3 +46,12 @@ export const gameRoomInfoStore = defineStore({
     },
   }),
 });
+
+export const gameWatchStore = defineStore({
+	id: "gameWatch",
+	state: () => ({
+	  data: {
+		isWatch: false,
+	  },
+	}),
+  });

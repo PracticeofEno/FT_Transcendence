@@ -1,8 +1,6 @@
 import axios, { type AxiosResponse } from "axios";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
-const backend = import.meta.env.VITE_BACKEND;
-axios.defaults.withCredentials = true;
 
 export async function getChennelList() {
   const response = await axios.get("/api/channels/list", {
@@ -24,8 +22,7 @@ export async function getJoinedChannel() {
 
 export async function getCheckPassword(channel_id: string, password: string) {
   const response = await axios.get(
-    backend +
-      "/channels/checkpassword?channel_id=" +
+    "/api/channels/checkpassword?channel_id=" +
       channel_id +
       "&password=" +
       password,
@@ -272,11 +269,7 @@ export async function changeAdmin(user_id: string, channel_id: string) {
 
 export async function checkAdmin(channel_id: number, user_id: string) {
   const response = await axios.get(
-    backend +
-      "/channels/admin/?channel_id=" +
-      channel_id +
-      "&user_id=" +
-      user_id,
+    "/api/channels/admin/?channel_id=" + channel_id + "&user_id=" + user_id,
     {
       headers: {
         Authorization: `Bearer ` + cookies.get("jwt"),

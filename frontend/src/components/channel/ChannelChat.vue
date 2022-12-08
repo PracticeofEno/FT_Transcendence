@@ -3,6 +3,12 @@ import UserListBox from "@/components/channel/components/UserListBox.vue";
 import ChatInputBox from "@/components/channel/components/ChatInputBox.vue";
 import ChatBox from "@/components/channel/components/ChatBox.vue";
 import ChatNav from "@/components/channel/components/ChatNav.vue";
+import { onUnmounted } from "vue";
+import { ChatStore } from "@/stores/chatting";
+
+onUnmounted(() => {
+  ChatStore().dataReset();
+});
 </script>
 
 <template>

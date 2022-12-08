@@ -3,7 +3,12 @@ import { ref, watch } from "vue";
 import { modalProfileStore, modalAlertStore } from "@/stores/modal";
 import { useUserStore } from "@/stores/user";
 import { UserListStore } from "@/stores/userList";
-import { addFriend, setBlock, delRelation } from "@/api/UserService";
+import {
+  addFriend,
+  setBlock,
+  delRelation,
+  getUserById,
+} from "@/api/UserService";
 import {
   giveMuted,
   kick,
@@ -53,11 +58,16 @@ watch(
   }
 );
 
-function Battle() {
+async function Battle() {
   console.log("Battle");
-  if (modal.data.status === 2)
+  const user = await getUserById(modal.data.id);
+  if (user.status === 1) {
+    GameSocketStore().socket.emit("throwGauntlet", modal.data.id);
+  } else if (user.status === 2) {
     GameSocketStore().socket.emit("watchGame", modal.data.id);
-  else GameSocketStore().socket.emit("throwGauntlet", modal.data.id);
+  } else if (user.status === 0) {
+    alert.alertMsg("상대가 로그인 상태가 아닙니다");
+  }
   closeProfileModal();
 }
 
@@ -223,7 +233,10 @@ async function toggleAdmin() {
             </div>
           </div>
         </div>
-        <div class="profile_action_box">
+        <div
+          class="profile_action_box"
+          v-if="chatStore.data.category !== 'game'"
+        >
           <ul>
             <li>
               <span @click="Battle">{{

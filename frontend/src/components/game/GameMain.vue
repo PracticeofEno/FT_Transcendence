@@ -9,6 +9,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { gameRoomInfoStore } from "@/stores/game";
 import { GameSocketStore } from "@/stores/gameSocket";
+import { modalAlertStore } from "@/stores/modal";
 
 const gameSocketStore = GameSocketStore();
 
@@ -102,6 +103,11 @@ gameSocketStore.socket.on("passError", () => {
   }, 1000);
 });
 
+gameSocketStore.socket.on("noRoom", () => {
+  modalAlertStore().alertMsg("해당 방에 들어갈 수 없습니다");
+  showListInputPass.value = false;
+});
+
 function showInputPass(roomData: [number, string]) {
   enterRoomNum.value = roomData[0];
   enterRoomName.value = roomData[1];
@@ -115,11 +121,11 @@ function cancleInputPass() {
 }
 
 /*
- * gameMode
- * 0 : rank
- * 1 : normal
- * 2 : portal
- */
+* gameMode
+* 0 : rank
+* 1 : normal
+* 2 : portal
+*/
 </script>
 
 <template>

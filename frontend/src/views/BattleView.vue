@@ -18,6 +18,7 @@ import {
   gameMyselfStore,
   gameOpponentStore,
   gameRoomInfoStore,
+  gameWatchStore
 } from "@/stores/game";
 import { ChatStore } from "@/stores/chatting";
 import { getUserByNickname } from "@/api/UserService";
@@ -41,6 +42,7 @@ const playerNickName = ref(["", ""]);
 const homeViewProfile = useUserStore();
 const gameMyself = gameMyselfStore();
 const gameOpponent = gameOpponentStore();
+const watchBattle = gameWatchStore();
 
 const isUsersSet = ref(false); // 유저 2명인지 set 판단
 const isPlayersSet = ref([false, false]); // 플레이어 2명 배열로 있는지 판단
@@ -59,7 +61,6 @@ const timer = ref(5);
 const isGameStart = ref(false);
 const checkFinished = ref(false);
 const timerAmimation = ref(false);
-const backend = import.meta.env.VITE_BACKEND;
 
 const socketOptions = {
   transportOptions: {
@@ -81,7 +82,7 @@ function setGameUser(where: GameUser, what: ApiUser) {
   where.lose = what?.lose;
 }
 
-const socket: Socket = io(backend + "/game", socketOptions);
+const socket: Socket = io("http://localhost:5000/game", socketOptions);
 socket.on("connect", () => {
   gameRoomInfo.socket = socket;
   if (chatStore.data.chat) {
@@ -93,15 +94,19 @@ socket.on("connect", () => {
   chatStore.data.type = "game";
   chatStore.onChat = true;
 
-  if (gameRoomInfo.data.mode === -1) {
-    router.go(-1);
-  } else if (gameRoomInfo.data.mode === 0) {
-    socket.emit("rankBattle");
-  } else if (gameRoomInfo.data.mode === 1) {
-    socket.emit("normalBattle");
-  } else if (gameRoomInfo.data.mode === 2) {
+  if (watchBattle.data.isWatch === false) {
+    if (gameRoomInfo.data.mode === -1) {
+      router.go(-1);
+    } else if (gameRoomInfo.data.mode === 0) {
+      socket.emit("rankBattle");
+    } else {
+      socket.emit("normalBattle");
+    }
+  } else {
+    if (gameRoomInfo.data.mode === -1)
+      router.go(-1);
     /**오로지 관전을 위한 이벤트 추가. */
-    socket.emit("watchBattle");
+    else socket.emit("watchBattle");
   }
 });
 
@@ -337,6 +342,7 @@ async function leaveGame(flag: number) {
   else if (flag === 2) socket.emit("giveUpGame", gameRoomInfo.data.roomNum);
   else showLeaveObserver.value = false;
   gameRoomInfo.data.mode = -1;
+  watchBattle.data.isWatch = false;
   router.push("/");
 }
 

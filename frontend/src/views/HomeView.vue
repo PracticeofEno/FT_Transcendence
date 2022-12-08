@@ -29,9 +29,9 @@ const socketOptions = {
   },
 };
 
-UserListStore().socket = io("/api/", socketOptions);
-GameSocketStore().socket = io("/api/game", socketOptions);
-ChatStore().socket = io("/api/chat", socketOptions);
+UserListStore().socket = io("http://localhost:5000/", socketOptions);
+GameSocketStore().socket = io("http://localhost:5000/game", socketOptions);
+ChatStore().socket = io("http://localhost:5000/chat", socketOptions);
 
 const router = useRouter();
 // import { CurrentUserStore } from "@/stores/tmp";

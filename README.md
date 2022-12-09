@@ -8,7 +8,7 @@
 - ~~backend -> localhost:5000, frontend -> localhost:3000, postgres->localhost:5432~~
 - ~~출처 : https://developers.google.com/identity/protocols/oauth2/web-server#uri-validation~~
 
-## 사용해보기 : http://teemo-world.link/
+## 사용해보기(배포버전 X , 개발버전상태) : http://teemo-world.link/
 
 ----------------------
 

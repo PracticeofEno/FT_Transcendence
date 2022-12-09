@@ -3,7 +3,7 @@
 - 신인호(front디자인 및 데이터 바인딩)
 - 최영덕(백엔드 - game관련, 프론트 - game관련)
 ### ~~42API 기한 만료로 인해 더이상 동작하지 않습니다(Oauth 단일 로그인 방식)~~ -> google oauth 변경
-## ~~google oauth의 경우 redirect uri 유효성 검사가 원시 host ip를 지원하지 않는것으로 추정됨~~ -> AWS
+## google oauth의 경우 redirect uri 유효성 검사가 원시 host ip를 지원하지 않는것으로 추정됨 -> AWS로 변경
 - ~~각 서버에 대한 ip를 localhost로 통일시킨 이유~~
 - ~~backend -> localhost:5000, frontend -> localhost:3000, postgres->localhost:5432~~
 - ~~출처 : https://developers.google.com/identity/protocols/oauth2/web-server#uri-validation~~

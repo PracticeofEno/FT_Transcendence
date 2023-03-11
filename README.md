@@ -4,12 +4,11 @@
 - 최영덕(백엔드 - game관련, 프론트 - game관련)
 
 ### 42Ouath 로그인 -> google oauth 변경
-## localhost  -> AWS로 이동 -> 프론트 + CI/CD 공부하느라 종료 
+## localhost  -> AWS로 이동 -> 프리티어라서 프론트 + CI/CD 공부하느라 종료 
 - ~~각 서버에 대한 ip를 localhost로 통일시킨 이유~~
 - ~~backend -> localhost:5000, frontend -> localhost:3000, postgres->localhost:5432~~
 - ~~출처 : https://developers.google.com/identity/protocols/oauth2/web-server#uri-validation~~
-
-# 프리티어라서 
+- 
 ----------------------
 
 ## 목적
